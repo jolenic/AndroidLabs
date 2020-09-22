@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Snackbar snackbar1 =
-                new Snackbar.make(view, (isChecked ? snackbar_on : snackbar_off), Snackbar.LENGTH_LONG)
+                Snackbar.make(view, (isChecked ? snackbar_on : snackbar_off), Snackbar.LENGTH_LONG)
                         .setAction("Undo", click->switch1.setChecked(!isChecked))
                         .show();
             }
