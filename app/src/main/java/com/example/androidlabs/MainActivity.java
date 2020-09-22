@@ -46,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        checkbox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Snackbar.make(view, (isChecked ? snackbar_on : snackbar_off), Snackbar.LENGTH_LONG)
+                        .setAction("Undo", click->checkbox1.setChecked(!isChecked))
+                        .show();
+            }
+        });
+
 
 
     }
