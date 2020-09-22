@@ -6,8 +6,10 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:text="@string/look_gui"
         android:textSize="30dp" />
 
@@ -16,6 +18,8 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_alignParentStart="true"
         android:text="@string/click_here"
         android:layout_weight="1"/>
 
@@ -23,6 +27,9 @@
         android:id="@+id/checkbox1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/button1"
+        android:layout_below="@+id/textView1"
+        android:layout_alignParentEnd="true"
         android:text="@string/check_box"
         android:layout_weight="1"/>
 
@@ -31,6 +38,8 @@
         android:id="@+id/flag_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_alignParentStart="true"
         android:layout_weight="1"
         android:src="@drawable/flag" />
 
@@ -38,12 +47,16 @@
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/flag_button"
+        android:layout_below="@+id/button1"
+        android:layout_alignParentEnd="true"
         android:layout_weight="1"
         android:text="@string/on_off" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/flag_button"
         android:hint="@string/type_hint"
         android:inputType="textPersonName|textCapWords" />
 
