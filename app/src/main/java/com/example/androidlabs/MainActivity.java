@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     EditText user_password;
     SharedPreferences pref;
     public static final String Email = "emailKey";
+    Button login_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +31,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.email_form);
         View view = findViewById(R.id.view);
         user_email = findViewById(R.id.user_email);
+        login_button = findViewById(R.id.login_button);
         pref = getApplicationContext().getSharedPreferences("Prefs", MODE_PRIVATE);
         if (pref.contains(Email)) {
             user_email.setText(pref.getString(Email, ""));
         }
+        login_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Login pressed!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -45,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         String email = user_email.getText().toString();
         editor.putString(Email, "email");
     }
+
 
 
 }
