@@ -2,11 +2,15 @@ package com.example.androidlabs;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -15,47 +19,32 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
+    EditText user_email;
+    EditText user_password;
+    SharedPreferences pref;
+    public static final String Email = "emailKey";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_linear);
-
-        final Button button1 = findViewById(R.id.button1);
-        final String toast_message = getResources().getString(R.string.toast_message);
-
-        final Switch switch1 = findViewById(R.id.switch1);
-        final CheckBox checkbox1 = findViewById(R.id.checkbox1);
-        final boolean switchOnOff = switch1.isChecked();
-        boolean checkOnOff = checkbox1.isChecked();
-        final String snackbar_on = getResources().getString(R.string.snackbar_on);
-        final String snackbar_off = getResources().getString(R.string.snackbar_off);
+        setContentView(R.layout.email_form);
         View view = findViewById(R.id.view);
-
-        button1.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-            Toast.makeText(MainActivity.this, toast_message, Toast.LENGTH_LONG).show();
-        }});
-
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Snackbar.make(view, (isChecked ? snackbar_on : snackbar_off), Snackbar.LENGTH_LONG)
-                        .setAction("Undo", click->switch1.setChecked(!isChecked))
-                        .show();
-            }
-        });
-
-        checkbox1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Snackbar.make(view, (isChecked ? snackbar_on : snackbar_off), Snackbar.LENGTH_LONG)
-                        .setAction("Undo", click->checkbox1.setChecked(!isChecked))
-                        .show();
-            }
-        });
-
-
-
+        user_email = findViewById(R.id.user_email);
+        pref = getApplicationContext().getSharedPreferences("Prefs", MODE_PRIVATE);
+        if (pref.contains(Email)) {
+            user_email.setText(pref.getString(Email, ""));
+        }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pref = getApplicationContext().getSharedPreferences("Prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        EditText user_email = findViewById(R.id.user_email);
+        String email = user_email.getText().toString();
+        editor.putString(Email, "email");
+    }
+
+
 }
