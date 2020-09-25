@@ -10,6 +10,10 @@
     <string name="toast_message">Here is more information</string>
     <string name="snackbar_on">The switch is now on</string>
     <string name="snackbar_off">The switch is now off</string>
+    <string name="enter_email">Enter your email address:</string>
+    <string name="email_prompt">Type email here</string>
+    <string name="enter_password">Type your password:</string>
+    <string name="login">LOGIN</string>
 
 
 </resources>
