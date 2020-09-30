@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -33,12 +34,13 @@ public class MainActivity extends AppCompatActivity {
         user_email = findViewById(R.id.user_email);
         login_button = findViewById(R.id.login_button);
         pref = getApplicationContext().getSharedPreferences("Prefs", MODE_PRIVATE);
+        Intent profile = new Intent(this, ProfileActivity.class);
         if (pref.contains(Email)) {
             user_email.setText(pref.getString(Email, ""));
         }
         login_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Login pressed!", Toast.LENGTH_LONG).show();
+                startActivity(profile);
             }
         });
     }

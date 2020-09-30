@@ -15,7 +15,13 @@
     <string name="email_prompt">Saisissez votre e-mail ici</string>
     <string name="enter_password">Tapez votre mot de passe:</string>
     <string name="login">S\'IDENTIFIER</string>
-
+    <string name="your_profile">Votre profil</string>
+    <string name="your_name">Votre nom:</string>
+    <string name="enter_name">Entrez votre nom</string>
+    <string name="your_email">Votre email:</string>
+    <string name="enter_your_email">Entrez votre email</string>
+    <string name="your_pic">Votre photo:</string>
+    <string name="click_pic">Cliquez sur le bouton ci-dessus pour prendre une photo</string>
 
 
 </resources>
