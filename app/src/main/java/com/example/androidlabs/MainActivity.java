@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         View view = findViewById(R.id.view);
         user_email = findViewById(R.id.user_email);
         login_button = findViewById(R.id.login_button);
-        pref = getApplicationContext().getSharedPreferences("Prefs", MODE_PRIVATE);
+        pref = getSharedPreferences("Prefs", MODE_PRIVATE);
         Intent profile = new Intent(this, ProfileActivity.class);
         if (pref.contains(Email)) {
             user_email.setText(pref.getString(Email, ""));
@@ -48,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        pref = getApplicationContext().getSharedPreferences("Prefs", MODE_PRIVATE);
+        pref = getSharedPreferences("Prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        EditText user_email = findViewById(R.id.user_email);
         String email = user_email.getText().toString();
-        editor.putString(Email, "email");
+        editor.putString(Email, email);
+        editor.apply();
     }
 
 
