@@ -22,6 +22,10 @@
     <string name="enter_your_email">Entrez votre email</string>
     <string name="your_pic">Votre photo:</string>
     <string name="click_pic">Cliquez sur le bouton ci-dessus pour prendre une photo</string>
+    <string name="to_chat">Aller au chat</string>
+    <string name="send">Envoyer</string>
+    <string name="receive">Recevoir</string>
+    <string name="type_here">Écrivez ici</string>
 
 
 </resources>
