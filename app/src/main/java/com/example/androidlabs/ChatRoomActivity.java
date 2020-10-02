@@ -86,8 +86,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
 
         @Override
-        public Object getItem(int position) {
-            return messages.get(position).toString();
+        public Message getItem(int position) {
+            return messages.get(position);
         }
 
         @Override
@@ -102,12 +102,14 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             //make a new row:
             if(newView == null) {
-                newView = inflater.inflate(R.layout.message_layout, parent, false);
+                    newView = inflater.inflate(R.layout.send_message_layout, parent, false);
             }
 
             //set what the text should be for this row:
-            TextView tView = newView.findViewById(R.id.textGoesHere);
-            tView.setText( getItem(position).toString() );
+
+                TextView tView = newView.findViewById(R.id.sendTextGoesHere);
+                tView.setText(getItem(position).toString());
+
 
             return newView;
         }
