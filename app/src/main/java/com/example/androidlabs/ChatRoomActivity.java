@@ -1,5 +1,6 @@
 package com.example.androidlabs;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -43,6 +44,27 @@ public class ChatRoomActivity extends AppCompatActivity {
                 messages.add(new Message("receive", chatText.getText().toString()));
                 adapter.notifyDataSetChanged();
                 chatText.setText("");}
+        });
+
+        messageList.setOnItemLongClickListener( (p, b, pos, id) -> {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Do you want to delete this?")
+
+                    //What is the message:
+                    .setMessage("The selected row is: " + pos + ".  The database ID is: " + id)
+
+                    //what the Yes button does:
+                    .setPositiveButton("Yes", (click, arg) -> {
+                        messages.remove(pos);
+                        adapter.notifyDataSetChanged();
+                    })
+                    //What the No button does:
+                    .setNegativeButton("No", (click, arg) -> { })
+
+
+                    //Show the dialog
+                    .create().show();
+            return true;
         });
     }
 
