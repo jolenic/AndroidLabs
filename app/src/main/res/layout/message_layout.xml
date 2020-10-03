@@ -4,12 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
+    <ImageView
+        android:id="@+id/user_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/female_user"
+        android:paddingTop="5dp"
+        />
 
     <TextView
         android:id="@+id/messageTextGoesHere"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Message content goes here"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"
+        android:text="Message content goes here" />
 
 </LinearLayout>

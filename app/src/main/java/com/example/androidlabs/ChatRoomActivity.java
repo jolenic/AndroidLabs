@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -131,10 +132,13 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 TextView tView = newView.findViewById(R.id.messageTextGoesHere);
                 tView.setText(getItem(position).toString());
+                ImageView img = newView.findViewById(R.id.user_pic);
                 if (getItem(position).getType() == "receive") {
                     tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                    img.setImageResource(R.drawable.female_user);
                 } else {
                     tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+                    img.setImageResource(R.drawable.male_user);
                 }
                 //ImageView img = newView.findViewById(R.id.send_image);
                 //img.setImageResource(R.drawable.guest_grey);
