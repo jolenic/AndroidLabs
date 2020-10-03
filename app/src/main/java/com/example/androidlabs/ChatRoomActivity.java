@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,7 +44,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 messages.add(new Message("receive", chatText.getText().toString()));
                 adapter.notifyDataSetChanged();
-                chatText.setText("");}
+                chatText.setText(""); }
         });
 
         messageList.setOnItemLongClickListener( (p, b, pos, id) -> {
@@ -131,6 +132,13 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 TextView tView = newView.findViewById(R.id.sendTextGoesHere);
                 tView.setText(getItem(position).toString());
+                if (getItem(position).getType() == "receive") {
+                    tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                } else {
+                    tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+                }
+                //ImageView img = newView.findViewById(R.id.send_image);
+                //img.setImageResource(R.drawable.guest_grey);
 
 
             return newView;
