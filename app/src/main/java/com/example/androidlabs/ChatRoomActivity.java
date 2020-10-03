@@ -96,9 +96,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             this.content = content;
         }
 
-        public String toString() {
-            return type + ": " + content;
-        }
+        public String toString() { return "  " + content + "  "; }
     }
 
     private class MyListAdapter extends BaseAdapter{
@@ -132,17 +130,19 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 TextView tView = newView.findViewById(R.id.messageTextGoesHere);
                 tView.setText(getItem(position).toString());
-                ImageView img = newView.findViewById(R.id.user_pic);
-                if (getItem(position).getType() == "receive") {
+                ImageView receive_pic = newView.findViewById(R.id.receive_pic);
+                ImageView send_pic = newView.findViewById(R.id.send_pic);
+
+
+            if (getItem(position).getType() == "receive") {
                     tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-                    img.setImageResource(R.drawable.female_user);
+                    receive_pic.setImageResource(R.drawable.row_receive);
+                    send_pic.setImageResource(0);
                 } else {
                     tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                    img.setImageResource(R.drawable.male_user);
+                    send_pic.setImageResource(R.drawable.row_send);
+                    receive_pic.setImageResource(0);
                 }
-                //ImageView img = newView.findViewById(R.id.send_image);
-                //img.setImageResource(R.drawable.guest_grey);
-
 
             return newView;
         }
