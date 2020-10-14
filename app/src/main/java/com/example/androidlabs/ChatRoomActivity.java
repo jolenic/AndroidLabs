@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ChatRoomActivity extends AppCompatActivity {
     private ArrayList<Message> messages = new ArrayList<>();
-    SQLiteDatabase db;
+    protected MyOpener opener = new MyOpener(this);
+    protected SQLiteDatabase db;
 
 
     @Override
@@ -35,7 +38,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         ListView messageList = findViewById(R.id.message_list);
 
-        loadDataFromDatabase();
+        loadDataFromDatabase(opener);
 
         MyListAdapter adapter = new MyListAdapter();
         messageList.setAdapter(adapter);
@@ -43,15 +46,15 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String type = "send";
+                int type = 0;
                 String content = chatText.getText().toString();
 
                 //add to db and get new ID
                 ContentValues newRowValues = new ContentValues();
-                newRowValues.put(MyOpener.COL_TYPE, type);
-                newRowValues.put(MyOpener.COL_CONTENT, content);
+                newRowValues.put(opener.COL_TYPE, type);
+                newRowValues.put(opener.COL_CONTENT, content);
                 //insert into db and get id value
-                long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+                long newId = db.insert(opener.TABLE_NAME, null, newRowValues);
                 messages.add(new Message(type, content, newId));
                 adapter.notifyDataSetChanged();
                 chatText.setText("");}
@@ -59,15 +62,15 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         receiveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String type = "receive";
+                int type = 1;
                 String content = chatText.getText().toString();
 
                 //add to db and get new ID
                 ContentValues newRowValues = new ContentValues();
-                newRowValues.put(MyOpener.COL_TYPE, type);
-                newRowValues.put(MyOpener.COL_CONTENT, content);
+                newRowValues.put(opener.COL_TYPE, type);
+                newRowValues.put(opener.COL_CONTENT, content);
                 //insert into db and get id value
-                long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+                long newId = db.insert(opener.TABLE_NAME, null, newRowValues);
 
                 messages.add(new Message(type, content, newId));
                 adapter.notifyDataSetChanged();
@@ -83,7 +86,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                     //what the Yes button does:
                     .setPositiveButton("Yes", (click, arg) -> {
-                        deleteContact(messages.get(pos));
+                        deleteContact(opener, messages.get(pos));
                         messages.remove(pos);
                         adapter.notifyDataSetChanged();
                     })
@@ -97,61 +100,86 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     } //end method onCreate
 
-    private void loadDataFromDatabase()
+    private void loadDataFromDatabase(MyOpener opener)
     {
         //get a database connection:
-        MyOpener dbOpener = new MyOpener(this);
+        MyOpener dbOpener = opener;
         db = dbOpener.getWritableDatabase();
 
 
         // We want to get all of the columns. Look at MyOpener.java for the definitions:
-        String [] columns = {MyOpener.COL_ID, MyOpener.COL_TYPE, MyOpener.COL_CONTENT};
+        String [] columns = {dbOpener.COL_ID, dbOpener.COL_TYPE, dbOpener.COL_CONTENT};
         //query all the results from the database:
-        Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+        Cursor results = db.query(false, dbOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+
+        printCursor(results, db.getVersion());
 
         //Now the results object has rows of results that match the query.
         //find the column indices:
-        int typeColIndex = results.getColumnIndex(MyOpener.COL_TYPE);
-        int contentColIndex = results.getColumnIndex(MyOpener.COL_CONTENT);
-        int idColIndex = results.getColumnIndex(MyOpener.COL_ID);
+        int typeColIndex = results.getColumnIndex(dbOpener.COL_TYPE);
+        int contentColIndex = results.getColumnIndex(dbOpener.COL_CONTENT);
+        int idColIndex = results.getColumnIndex(dbOpener.COL_ID);
 
         //iterate over the results, return true if there is a next item:
-        while(results.moveToNext())
+        results.moveToFirst();
+        while(!results.isAfterLast())
         {
-            String type = results.getString(typeColIndex);
+            int type = results.getInt(typeColIndex);
             String content = results.getString(contentColIndex);
             long id = results.getLong(idColIndex);
 
             //add the new message to the array list:
             messages.add(new Message(type, content, id));
+            results.moveToNext();
         }
 
         //At this point, the messages array has loaded every row from the cursor.
     } //end method loadDataFromDatabase
 
-    protected void deleteContact(Message m)
+    private void printCursor(Cursor c, int version) {
+        Log.d("Version #: ", String.valueOf(version));
+        Log.d("# of Columns: ", String.valueOf(c.getColumnCount()));
+        Log.d("Names of Columns: ", Arrays.toString(c.getColumnNames()));
+        Log.d("# of Results: ", String.valueOf(c.getCount()));
+
+        int typeColIndex = c.getColumnIndex(opener.COL_TYPE);
+        int contentColIndex = c.getColumnIndex(opener.COL_CONTENT);
+        int idColIndex = c.getColumnIndex(opener.COL_ID);
+        c.moveToFirst();
+        while(!c.isAfterLast()) {
+            int type = c.getInt(typeColIndex);
+            String content = c.getString(contentColIndex);
+            long id = c.getLong(idColIndex);
+            Log.d("ROW", "type: " + type + ", content: " + content + ", id:" + id);
+            c.moveToNext();
+        }
+
+    } //end method printCursor
+
+    protected void deleteContact(MyOpener opener, Message m)
     {
-        db.delete(MyOpener.TABLE_NAME, MyOpener.COL_ID + "= ?", new String[] {Long.toString(m.getId())});
+        db = opener.getWritableDatabase();
+        db.delete(opener.TABLE_NAME, opener.COL_ID + "= ?", new String[] {Long.toString(m.getId())});
     }
 
     private class Message {
 
-        private String type;
+        private int type;
         private String content;
         private long id;
 
-        Message(String type, String content, long id) {
+        Message(int type, String content, long id) {
             this.type = type;
             this.content = content;
             this.id = id;
         }
 
         //getters and setters
-        public String getType() {
+        public int getType() {
             return type;
         }
 
-        public void setType(String type) {
+        public void setType(int type) {
             this.type = type;
         }
 
@@ -205,7 +233,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 ImageView send_pic = newView.findViewById(R.id.send_pic);
 
 
-            if (getItem(position).getType() == "receive") {
+            if (getItem(position).getType() == 1) {
                     tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
                     receive_pic.setImageResource(R.drawable.row_receive);
                     send_pic.setImageResource(0);
