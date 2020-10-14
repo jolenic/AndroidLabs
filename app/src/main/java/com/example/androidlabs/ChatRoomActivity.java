@@ -3,6 +3,9 @@ package com.example.androidlabs;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 
 public class ChatRoomActivity extends AppCompatActivity {
     private ArrayList<Message> messages = new ArrayList<>();
+    SQLiteDatabase db;
 
 
     @Override
@@ -30,21 +34,44 @@ public class ChatRoomActivity extends AppCompatActivity {
         EditText chatText = findViewById(R.id.chat_text);
 
         ListView messageList = findViewById(R.id.message_list);
+
+        loadDataFromDatabase();
+
         MyListAdapter adapter = new MyListAdapter();
         messageList.setAdapter(adapter);
 
+
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                messages.add(new Message("send", chatText.getText().toString()));
+                String type = "send";
+                String content = chatText.getText().toString();
+
+                //add to db and get new ID
+                ContentValues newRowValues = new ContentValues();
+                newRowValues.put(MyOpener.COL_TYPE, type);
+                newRowValues.put(MyOpener.COL_CONTENT, content);
+                //insert into db and get id value
+                long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+                messages.add(new Message(type, content, newId));
                 adapter.notifyDataSetChanged();
                 chatText.setText("");}
         });
 
         receiveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                messages.add(new Message("receive", chatText.getText().toString()));
+                String type = "receive";
+                String content = chatText.getText().toString();
+
+                //add to db and get new ID
+                ContentValues newRowValues = new ContentValues();
+                newRowValues.put(MyOpener.COL_TYPE, type);
+                newRowValues.put(MyOpener.COL_CONTENT, content);
+                //insert into db and get id value
+                long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+
+                messages.add(new Message(type, content, newId));
                 adapter.notifyDataSetChanged();
-                chatText.setText(""); }
+                chatText.setText("");}
         });
 
         messageList.setOnItemLongClickListener( (p, b, pos, id) -> {
@@ -56,6 +83,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                     //what the Yes button does:
                     .setPositiveButton("Yes", (click, arg) -> {
+                        deleteContact(messages.get(pos));
                         messages.remove(pos);
                         adapter.notifyDataSetChanged();
                     })
@@ -67,16 +95,55 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .create().show();
             return true;
         });
+    } //end method onCreate
+
+    private void loadDataFromDatabase()
+    {
+        //get a database connection:
+        MyOpener dbOpener = new MyOpener(this);
+        db = dbOpener.getWritableDatabase();
+
+
+        // We want to get all of the columns. Look at MyOpener.java for the definitions:
+        String [] columns = {MyOpener.COL_ID, MyOpener.COL_TYPE, MyOpener.COL_CONTENT};
+        //query all the results from the database:
+        Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+
+        //Now the results object has rows of results that match the query.
+        //find the column indices:
+        int typeColIndex = results.getColumnIndex(MyOpener.COL_TYPE);
+        int contentColIndex = results.getColumnIndex(MyOpener.COL_CONTENT);
+        int idColIndex = results.getColumnIndex(MyOpener.COL_ID);
+
+        //iterate over the results, return true if there is a next item:
+        while(results.moveToNext())
+        {
+            String type = results.getString(typeColIndex);
+            String content = results.getString(contentColIndex);
+            long id = results.getLong(idColIndex);
+
+            //add the new message to the array list:
+            messages.add(new Message(type, content, id));
+        }
+
+        //At this point, the messages array has loaded every row from the cursor.
+    } //end method loadDataFromDatabase
+
+    protected void deleteContact(Message m)
+    {
+        db.delete(MyOpener.TABLE_NAME, MyOpener.COL_ID + "= ?", new String[] {Long.toString(m.getId())});
     }
 
     private class Message {
 
         private String type;
         private String content;
+        private long id;
 
-        Message(String type, String content) {
+        Message(String type, String content, long id) {
             this.type = type;
             this.content = content;
+            this.id = id;
         }
 
         //getters and setters
@@ -96,8 +163,12 @@ public class ChatRoomActivity extends AppCompatActivity {
             this.content = content;
         }
 
+        public long getId() { return id;}
+
+        public void setId(long id) { this.id = id; }
+
         public String toString() { return "  " + content + "  "; }
-    }
+    } //end sub-class Message
 
     private class MyListAdapter extends BaseAdapter{
 
@@ -113,7 +184,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         @Override
         public long getItemId(int position) {
-            return (long) position;
+            return messages.get(position).getId();
         }
 
         @Override
@@ -147,6 +218,6 @@ public class ChatRoomActivity extends AppCompatActivity {
             return newView;
         }
 
-    }
-}
+    } //end sub-class MyListAdapter
+} //end class ChatRoomActivity
 
