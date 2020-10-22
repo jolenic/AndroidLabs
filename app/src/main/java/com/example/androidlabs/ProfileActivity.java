@@ -15,6 +15,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     ImageButton mImageButton;
     Button chatButton;
+    Button weatherButton;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final String ACTIVITY_NAME = "PROFILE_ACTIVITY";
 
@@ -51,6 +52,11 @@ public class ProfileActivity extends AppCompatActivity {
         Intent chatRoom = new Intent(this, ChatRoomActivity.class);
         chatButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {startActivity(chatRoom);}
+        });
+        weatherButton = findViewById(R.id.weather_button);
+        Intent weatherForecast = new Intent(this, WeatherForecast.class);
+        weatherButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {startActivity(weatherForecast);}
         });
         Log.e(ACTIVITY_NAME, "In function: onCreate()");
     }
