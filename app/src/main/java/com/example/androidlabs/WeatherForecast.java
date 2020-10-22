@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -16,6 +17,9 @@ import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -103,18 +107,32 @@ public class WeatherForecast extends AppCompatActivity {
                     eventType = xpp.next(); //move to the next xml event and store it in a variable
                 }
 
-                String urlString = "http://openweathermap.org/img/w/" + iconName + ".png";
-
-                URL url2 = new URL(urlString);
-                HttpURLConnection connection = (HttpURLConnection) url2.openConnection();
-                connection.connect();
-                int responseCode = connection.getResponseCode();
-                if (responseCode == 200) {
-                    icon = BitmapFactory.decodeStream(connection.getInputStream());
-                }
-                publishProgress(100);
-
                 fname = iconName+".png";
+                Log.i("Looking for file", fname);
+
+                if (fileExistance(fname)){
+                    Log.i("Image found locally", fname);
+                    FileInputStream fis = null;
+                    try {    fis = openFileInput(fname);   }
+                    catch (FileNotFoundException e) {    e.printStackTrace();  }
+                    icon = BitmapFactory.decodeStream(fis);
+                    publishProgress(100);
+                }
+                else {
+
+                    Log.i("Not found locally", "beginning download");
+                    String urlString = "http://openweathermap.org/img/w/" + fname;
+
+                    URL url2 = new URL(urlString);
+                    HttpURLConnection connection = (HttpURLConnection) url2.openConnection();
+                    connection.connect();
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == 200) {
+                        icon = BitmapFactory.decodeStream(connection.getInputStream());
+                    }
+                    publishProgress(100);
+                }
+
 
                 FileOutputStream outputStream = openFileOutput( fname, Context.MODE_PRIVATE);
                 icon.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
@@ -129,6 +147,13 @@ public class WeatherForecast extends AppCompatActivity {
 
             return null;
         }
+
+        public boolean fileExistance(String fname){
+            File file = getBaseContext().getFileStreamPath(fname);
+            Log.i("File exists in memory", String.valueOf(file.exists()));
+            return file.exists();
+        }
+
 
         @Override
         protected void onProgressUpdate(Integer ... args) {
