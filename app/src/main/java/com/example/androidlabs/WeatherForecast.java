@@ -2,7 +2,9 @@ package com.example.androidlabs;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
@@ -44,7 +47,7 @@ public class WeatherForecast extends AppCompatActivity {
 
         ForecastQuery fq = new ForecastQuery();
         fq.execute("http://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=7e943c97096a9784391a981c4d878b22&mode=xml&units=metric");
-
+        //fq.execute("http://api.openweathermap.org/data/2.5/uvi?appid=7e943c97096a9784391a981c4d878b22&lat=45.348945&lon=-75.759389");
 
     } //end method onCreate
 
@@ -55,7 +58,8 @@ public class WeatherForecast extends AppCompatActivity {
         private String max;
         private String uv;
         private String iconName;
-        private Bitmap weatherImg;
+        private String fname;
+        private Bitmap icon;
 
         @Override
         protected String doInBackground(String... args) {
@@ -83,21 +87,41 @@ public class WeatherForecast extends AppCompatActivity {
                         {
                             //If you get here, then you are pointing to a <Weather> start tag
                             current = xpp.getAttributeValue(null,    "value");
-                            publishProgress(25, 50, 75);
+                            publishProgress(25);
                             min = xpp.getAttributeValue(null, "min");
-                            publishProgress(25, 50, 75);
+                            publishProgress(50);
                             max = xpp.getAttributeValue(null, "max");
-                            publishProgress(25, 50, 75);
+                            publishProgress(75);
                         }
 
                         else if(xpp.getName().equals("weather"))
                         {
                             iconName = xpp.getAttributeValue(null, "icon");
-                            publishProgress(25, 50, 75);
+                            publishProgress(75);
                         }
                     }
                     eventType = xpp.next(); //move to the next xml event and store it in a variable
                 }
+
+                String urlString = "http://openweathermap.org/img/w/" + iconName + ".png";
+
+                URL url2 = new URL(urlString);
+                HttpURLConnection connection = (HttpURLConnection) url2.openConnection();
+                connection.connect();
+                int responseCode = connection.getResponseCode();
+                if (responseCode == 200) {
+                    icon = BitmapFactory.decodeStream(connection.getInputStream());
+                }
+                publishProgress(100);
+
+                fname = iconName+".png";
+
+                FileOutputStream outputStream = openFileOutput( fname, Context.MODE_PRIVATE);
+                icon.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+                outputStream.flush();
+                outputStream.close();
+
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -117,6 +141,7 @@ public class WeatherForecast extends AppCompatActivity {
             currentTemp.setText("Current Temperature: " +current);
             minTemp.setText("Min Temperature: " +min);
             maxTemp.setText("Max Temperature: " +max);
+            weatherImg.setImageBitmap(icon);
 
             progress.setVisibility(View.INVISIBLE);
         }
