@@ -53,8 +53,7 @@ public class WeatherForecast extends AppCompatActivity {
         progress.setVisibility(View.VISIBLE);
 
         ForecastQuery fq = new ForecastQuery();
-        fq.execute("http://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=7e943c97096a9784391a981c4d878b22&mode=xml&units=metric");
-        //fq.execute("http://api.openweathermap.org/data/2.5/uvi?appid=7e943c97096a9784391a981c4d878b22&lat=45.348945&lon=-75.759389");
+        fq.execute("https://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=7e943c97096a9784391a981c4d878b22&mode=xml&units=metric");
 
     } //end method onCreate
 
@@ -120,7 +119,7 @@ public class WeatherForecast extends AppCompatActivity {
                 }
                 else {
 
-                    String urlString = "http://openweathermap.org/img/w/" + fname;
+                    String urlString = "https://openweathermap.org/img/w/" + fname;
 
                     URL url2 = new URL(urlString);
                     HttpURLConnection connection = (HttpURLConnection) url2.openConnection();
@@ -138,7 +137,7 @@ public class WeatherForecast extends AppCompatActivity {
                 outputStream.flush();
                 outputStream.close();
 
-                URL uvUrl = new URL("http://api.openweathermap.org/data/2.5/uvi?appid=7e943c97096a9784391a981c4d878b22&lat=45.348945&lon=-75.759389");
+                URL uvUrl = new URL("https://api.openweathermap.org/data/2.5/uvi?appid=7e943c97096a9784391a981c4d878b22&lat=45.348945&lon=-75.759389");
                 HttpURLConnection uvConnection = (HttpURLConnection) uvUrl.openConnection();
                 response = uvConnection.getInputStream();
 
