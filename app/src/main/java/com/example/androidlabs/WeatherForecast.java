@@ -53,7 +53,7 @@ public class WeatherForecast extends AppCompatActivity {
         progress.setVisibility(View.VISIBLE);
 
         ForecastQuery fq = new ForecastQuery();
-        fq.execute("http://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=7e943c97096a9784391a981c4d878b22&mode=xml&units=metric");
+        fq.execute("https://api.openweathermap.org/data/2.5/weather?q=ottawa,ca&APPID=7e943c97096a9784391a981c4d878b22&mode=xml&units=metric");
 
     } //end method onCreate
 
@@ -72,12 +72,13 @@ public class WeatherForecast extends AppCompatActivity {
             try {
                 URL url = new URL(args[0]);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream response = urlConnection.getInputStream();
+                InputStream resp = urlConnection.getInputStream();
+                Log.d("input stream", String.valueOf(resp));
 
                 XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(false);
                 XmlPullParser xpp = factory.newPullParser();
-                xpp.setInput( response  , "UTF-8");
+                xpp.setInput( resp  , "UTF-8");
 
                 int eventType = xpp.getEventType(); //The parser is currently at START_DOCUMENT
 
@@ -119,7 +120,7 @@ public class WeatherForecast extends AppCompatActivity {
                 }
                 else {
 
-                    String urlString = "http://openweathermap.org/img/w/" + fname;
+                    String urlString = "https://openweathermap.org/img/w/" + fname;
 
                     URL url2 = new URL(urlString);
                     HttpURLConnection connection = (HttpURLConnection) url2.openConnection();
@@ -137,13 +138,13 @@ public class WeatherForecast extends AppCompatActivity {
                 outputStream.flush();
                 outputStream.close();
 
-                URL uvUrl = new URL("http://api.openweathermap.org/data/2.5/uvi?appid=7e943c97096a9784391a981c4d878b22&lat=45.348945&lon=-75.759389");
+                URL uvUrl = new URL("https://api.openweathermap.org/data/2.5/uvi?appid=7e943c97096a9784391a981c4d878b22&lat=45.348945&lon=-75.759389");
                 HttpURLConnection uvConnection = (HttpURLConnection) uvUrl.openConnection();
-                response = uvConnection.getInputStream();
+                resp = uvConnection.getInputStream();
 
                 //JSON reading:
-                //Build the entire string response:
-                BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+                //Build the entire string resp:
+                BufferedReader reader = new BufferedReader(new InputStreamReader(resp, "UTF-8"), 8);
                 StringBuilder sb = new StringBuilder();
 
                 String line = null;
