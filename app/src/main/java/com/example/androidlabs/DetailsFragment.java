@@ -1,6 +1,7 @@
 package com.example.androidlabs;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,14 +40,14 @@ public class DetailsFragment extends Fragment {
         TextView messageID = newView.findViewById(R.id.messageID);
         messageID.setText(String.valueOf(id));
         CheckBox isSendCheck = newView.findViewById(R.id.isSendCheck);
-        if (type==0) {
+        if (type == 0) {
             isSendCheck.setChecked(true);
-        } else{
+        } else {
             isSendCheck.setChecked(false);
         }
 
-        Button hideButton = (Button)newView.findViewById(R.id.hideButton);
-        hideButton.setOnClickListener( clk -> {
+        Button hideButton = (Button) newView.findViewById(R.id.hideButton);
+        hideButton.setOnClickListener(clk -> {
 
             //Tell the parent activity to remove
             parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
@@ -61,7 +62,7 @@ public class DetailsFragment extends Fragment {
         super.onAttach(context);
 
         //context will either be FragmentExample for a tablet, or EmptyActivity for phone
-        parentActivity = (AppCompatActivity)context;
+        parentActivity = (AppCompatActivity) context;
     } //end onAttach()
 
 } //end class DetailsFragment

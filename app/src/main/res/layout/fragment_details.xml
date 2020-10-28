@@ -5,32 +5,33 @@
     android:layout_height="match_parent"
     tools:context=".DetailsFragment">
 
-   <LinearLayout
-       android:layout_height="wrap_content"
-       android:layout_width="match_parent"
-       android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-       <TextView
-           android:id="@+id/messageContent"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:text="Message Here"
-           android:textSize="24sp"/>
+        <TextView
+            android:id="@+id/messageContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Message Here"
+            android:textSize="24sp" />
 
-       <TextView
-           android:id="@+id/messageID"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:text="ID="
-           android:textSize="24sp"/>
+        <TextView
+            android:id="@+id/messageID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ID="
+            android:textSize="24sp" />
 
-       <CheckBox
-           android:id="@+id/isSendCheck"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:text="Is a Send Message" />
+        <CheckBox
+            android:id="@+id/isSendCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Is a Send Message" />
 
-   </LinearLayout>
+    </LinearLayout>
+
     <Button
         android:id="@+id/hideButton"
         android:layout_width="fill_parent"

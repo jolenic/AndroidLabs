@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChatRoomActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ChatRoomActivity">
 
     <ListView
         android:id="@+id/message_list"
@@ -22,9 +21,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/send_button"
@@ -36,10 +35,9 @@
                 android:id="@+id/chat_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/type_here"
-                android:layout_weight="1"
                 android:layout_gravity="fill"
-                />
+                android:layout_weight="1"
+                android:hint="@string/type_here" />
 
             <Button
                 android:id="@+id/receive_button"

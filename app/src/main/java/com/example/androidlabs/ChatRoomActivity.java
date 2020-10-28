@@ -128,13 +128,14 @@ public class ChatRoomActivity extends AppCompatActivity {
                         }
                     })
                     //What the No button does:
-                    .setNegativeButton("No", (click, arg) -> { })
+                    .setNegativeButton("No", (click, arg) -> {
+                    })
 
 
                     //Show the dialog
                     .create().show();
             return true;
-      });
+        });
 
         messageList.setOnItemClickListener((list, item, position, id) -> {
 
@@ -160,15 +161,14 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     } //end method onCreate
 
-    private void loadDataFromDatabase(MyOpener opener)
-    {
+    private void loadDataFromDatabase(MyOpener opener) {
         //get a database connection:
         MyOpener dbOpener = opener;
         db = dbOpener.getWritableDatabase();
 
 
         // We want to get all of the columns. Look at MyOpener.java for the definitions:
-        String [] columns = {dbOpener.COL_ID, dbOpener.COL_TYPE, dbOpener.COL_CONTENT};
+        String[] columns = {dbOpener.COL_ID, dbOpener.COL_TYPE, dbOpener.COL_CONTENT};
         //query all the results from the database:
         Cursor results = db.query(false, dbOpener.TABLE_NAME, columns, null, null, null, null, null, null);
 
@@ -182,8 +182,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         //iterate over the results, return true if there is a next item:
         results.moveToFirst();
-        while(!results.isAfterLast())
-        {
+        while (!results.isAfterLast()) {
             int type = results.getInt(typeColIndex);
             String content = results.getString(contentColIndex);
             long id = results.getLong(idColIndex);
@@ -206,7 +205,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         int contentColIndex = c.getColumnIndex(opener.COL_CONTENT);
         int idColIndex = c.getColumnIndex(opener.COL_ID);
         c.moveToFirst();
-        while(!c.isAfterLast()) {
+        while (!c.isAfterLast()) {
             int type = c.getInt(typeColIndex);
             String content = c.getString(contentColIndex);
             long id = c.getLong(idColIndex);
@@ -216,10 +215,9 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     } //end method printCursor
 
-    protected void deleteContact(MyOpener opener, Message m)
-    {
+    protected void deleteContact(MyOpener opener, Message m) {
         db = opener.getWritableDatabase();
-        db.delete(opener.TABLE_NAME, opener.COL_ID + "= ?", new String[] {Long.toString(m.getId())});
+        db.delete(opener.TABLE_NAME, opener.COL_ID + "= ?", new String[]{Long.toString(m.getId())});
     }
 
     private class Message {
@@ -251,14 +249,20 @@ public class ChatRoomActivity extends AppCompatActivity {
             this.content = content;
         }
 
-        public long getId() { return id;}
+        public long getId() {
+            return id;
+        }
 
-        public void setId(long id) { this.id = id; }
+        public void setId(long id) {
+            this.id = id;
+        }
 
-        public String toString() { return "  " + content + "  "; }
+        public String toString() {
+            return "  " + content + "  ";
+        }
     } //end sub-class Message
 
-    private class MyListAdapter extends BaseAdapter{
+    private class MyListAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -281,27 +285,27 @@ public class ChatRoomActivity extends AppCompatActivity {
             LayoutInflater inflater = getLayoutInflater();
 
             //make a new row:
-            if(newView == null) {
-                    newView = inflater.inflate(R.layout.message_layout, parent, false);
+            if (newView == null) {
+                newView = inflater.inflate(R.layout.message_layout, parent, false);
             }
 
             //set what the text should be for this row:
 
-                TextView tView = newView.findViewById(R.id.messageTextGoesHere);
-                tView.setText(getItem(position).toString());
-                ImageView receive_pic = newView.findViewById(R.id.receive_pic);
-                ImageView send_pic = newView.findViewById(R.id.send_pic);
+            TextView tView = newView.findViewById(R.id.messageTextGoesHere);
+            tView.setText(getItem(position).toString());
+            ImageView receive_pic = newView.findViewById(R.id.receive_pic);
+            ImageView send_pic = newView.findViewById(R.id.send_pic);
 
 
             if (getItem(position).getType() == 1) {
-                    tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-                    receive_pic.setImageResource(R.drawable.row_receive);
-                    send_pic.setImageResource(0);
-                } else {
-                    tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                    send_pic.setImageResource(R.drawable.row_send);
-                    receive_pic.setImageResource(0);
-                }
+                tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                receive_pic.setImageResource(R.drawable.row_receive);
+                send_pic.setImageResource(0);
+            } else {
+                tView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+                send_pic.setImageResource(R.drawable.row_send);
+                receive_pic.setImageResource(0);
+            }
 
             return newView;
         }
