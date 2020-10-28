@@ -32,6 +32,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
 
+        Boolean isTablet = (findViewById(R.id.frame) != null);
+
         Button sendButton = findViewById(R.id.send_button);
         Button receiveButton = findViewById(R.id.receive_button);
         EditText chatText = findViewById(R.id.chat_text);
