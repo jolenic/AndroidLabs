@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -79,26 +80,50 @@ public class ChatRoomActivity extends AppCompatActivity {
                 chatText.setText("");}
         });
 
-        messageList.setOnItemLongClickListener( (p, b, pos, id) -> {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("Do you want to delete this?")
+        messageList.setOnItemLongClickListener( (list, item, position, id) -> {
 
-                    //What is the message:
-                    .setMessage("The selected row is: " + pos + ".  The database ID is: " + id)
+            Bundle dataToPass = new Bundle();
+            dataToPass.putString("MESSAGE_CONTENT", messages.get(position).getContent());
+            dataToPass.putInt("MESSAGE_POSITION", position);
+            dataToPass.putLong("MESSAGE_ID", id);
 
-                    //what the Yes button does:
-                    .setPositiveButton("Yes", (click, arg) -> {
-                        deleteContact(opener, messages.get(pos));
-                        messages.remove(pos);
-                        adapter.notifyDataSetChanged();
-                    })
-                    //What the No button does:
-                    .setNegativeButton("No", (click, arg) -> { })
+            if(isTablet)
+            {
+                DetailsFragment dFragment = new DetailsFragment(); //add a DetailFragment
+                dFragment.setArguments( dataToPass ); //pass it a bundle for information
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame, dFragment) //Add the fragment in FrameLayout
+                        .commit(); //actually load the fragment.
+            }
+            else //isPhone
+            {
+                Intent nextActivity = new Intent(ChatRoomActivity.this, EmptyActivity.class);
+                nextActivity.putExtras(dataToPass); //send data to next activity
+                startActivity(nextActivity); //make the transition
+            }
+        });
+    });
 
-
-                    //Show the dialog
-                    .create().show();
-            return true;
+//            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//            alertDialogBuilder.setTitle("Do you want to delete this?")
+//
+//                    //What is the message:
+//                    .setMessage("The selected row is: " + pos + ".  The database ID is: " + id)
+//
+//                    //what the Yes button does:
+//                    .setPositiveButton("Yes", (click, arg) -> {
+//                        deleteContact(opener, messages.get(pos));
+//                        messages.remove(pos);
+//                        adapter.notifyDataSetChanged();
+//                    })
+//                    //What the No button does:
+//                    .setNegativeButton("No", (click, arg) -> { })
+//
+//
+//                    //Show the dialog
+//                    .create().show();
+//            return true;
         });
     } //end method onCreate
 
