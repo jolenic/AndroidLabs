@@ -11,24 +11,28 @@
        android:orientation="vertical">
 
        <TextView
+           android:id="@+id/messageContent"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:text="Message Here"
            android:textSize="24sp"/>
 
        <TextView
+           android:id="@+id/messageID"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:text="ID="
            android:textSize="24sp"/>
 
        <CheckBox
+           android:id="@+id/isSendCheck"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:text="Is a Send Message" />
 
    </LinearLayout>
     <Button
+        android:id="@+id/hideButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

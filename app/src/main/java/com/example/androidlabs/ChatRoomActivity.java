@@ -27,6 +27,11 @@ public class ChatRoomActivity extends AppCompatActivity {
     protected MyOpener opener = new MyOpener(this);
     protected SQLiteDatabase db;
 
+    static final String MESSAGE_CONTENT = "MESSAGE_CONTENT";
+    static final String MESSAGE_TYPE = "MESSAGE_TYPE";
+    static final String MESSAGE_ID = "MESSAGE_ID";
+    private DetailsFragment dFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                 long newId = db.insert(opener.TABLE_NAME, null, newRowValues);
                 messages.add(new Message(type, content, newId));
                 adapter.notifyDataSetChanged();
-                chatText.setText("");}
+                chatText.setText("");
+            }
         });
 
         receiveButton.setOnClickListener(new View.OnClickListener() {
@@ -77,26 +83,25 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 messages.add(new Message(type, content, newId));
                 adapter.notifyDataSetChanged();
-                chatText.setText("");}
+                chatText.setText("");
+            }
         });
 
-        messageList.setOnItemLongClickListener( (list, item, position, id) -> {
+        messageList.setOnItemLongClickListener((list, item, position, id) -> {
 
             Bundle dataToPass = new Bundle();
-            dataToPass.putString("MESSAGE_CONTENT", messages.get(position).getContent());
-            dataToPass.putInt("MESSAGE_POSITION", position);
-            dataToPass.putLong("MESSAGE_ID", id);
+            dataToPass.putString(MESSAGE_CONTENT, messages.get(position).getContent());
+            dataToPass.putInt(MESSAGE_TYPE, messages.get(position).getType());
+            dataToPass.putLong(MESSAGE_ID, id);
 
-            if(isTablet)
-            {
+            if (isTablet) {
                 DetailsFragment dFragment = new DetailsFragment(); //add a DetailFragment
-                dFragment.setArguments( dataToPass ); //pass it a bundle for information
+                dFragment.setArguments(dataToPass); //pass it a bundle for information
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.frame, dFragment) //Add the fragment in FrameLayout
                         .commit(); //actually load the fragment.
-            }
-            else //isPhone
+            } else //isPhone
             {
                 Intent nextActivity = new Intent(ChatRoomActivity.this, EmptyActivity.class);
                 nextActivity.putExtras(dataToPass); //send data to next activity
@@ -105,25 +110,54 @@ public class ChatRoomActivity extends AppCompatActivity {
             return true;
         });
 
-//            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//            alertDialogBuilder.setTitle("Do you want to delete this?")
-//
-//                    //What is the message:
-//                    .setMessage("The selected row is: " + pos + ".  The database ID is: " + id)
-//
-//                    //what the Yes button does:
-//                    .setPositiveButton("Yes", (click, arg) -> {
-//                        deleteContact(opener, messages.get(pos));
-//                        messages.remove(pos);
-//                        adapter.notifyDataSetChanged();
-//                    })
-//                    //What the No button does:
-//                    .setNegativeButton("No", (click, arg) -> { })
-//
-//
-//                    //Show the dialog
-//                    .create().show();
-//            return true;
+        messageList.setOnItemLongClickListener((list, item, position, id) -> {
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Do you want to delete this?")
+
+                    //What is the message:
+                    .setMessage("The selected row is: " + position + ".  The database ID is: " + id)
+
+                    //what the Yes button does:
+                    .setPositiveButton("Yes", (click, arg) -> {
+                        deleteContact(opener, messages.get(position));
+                        messages.remove(position);
+                        adapter.notifyDataSetChanged();
+                        if (dFragment != null) {
+                            this.getSupportFragmentManager().beginTransaction().remove(dFragment).commit();
+                        }
+                    })
+                    //What the No button does:
+                    .setNegativeButton("No", (click, arg) -> { })
+
+
+                    //Show the dialog
+                    .create().show();
+            return true;
+      });
+
+        messageList.setOnItemClickListener((list, item, position, id) -> {
+
+            Bundle dataToPass = new Bundle();
+            dataToPass.putString(MESSAGE_CONTENT, messages.get(position).getContent());
+            dataToPass.putInt(MESSAGE_TYPE, messages.get(position).getType());
+            dataToPass.putLong(MESSAGE_ID, id);
+
+            if (isTablet) {
+                dFragment = new DetailsFragment(); //add a DetailFragment
+                dFragment.setArguments(dataToPass); //pass it a bundle for information
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame, dFragment) //Add the fragment in FrameLayout
+                        .commit(); //actually load the fragment.
+            } else //isPhone
+            {
+                Intent nextActivity = new Intent(ChatRoomActivity.this, EmptyActivity.class);
+                nextActivity.putExtras(dataToPass); //send data to next activity
+                startActivity(nextActivity); //make the transition
+            }
+        });
+
     } //end method onCreate
 
     private void loadDataFromDatabase(MyOpener opener)
