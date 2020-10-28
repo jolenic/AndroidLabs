@@ -102,8 +102,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                 nextActivity.putExtras(dataToPass); //send data to next activity
                 startActivity(nextActivity); //make the transition
             }
+            return true;
         });
-    });
 
 //            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 //            alertDialogBuilder.setTitle("Do you want to delete this?")
@@ -124,7 +124,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 //                    //Show the dialog
 //                    .create().show();
 //            return true;
-        });
     } //end method onCreate
 
     private void loadDataFromDatabase(MyOpener opener)
