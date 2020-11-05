@@ -26,6 +26,8 @@
     <string name="send">Envoyer</string>
     <string name="receive">Recevoir</string>
     <string name="type_here">Écrivez ici</string>
+    <string name="open">Ouvrez</string>
+    <string name="close">Fermez</string>
 
 
 </resources>
