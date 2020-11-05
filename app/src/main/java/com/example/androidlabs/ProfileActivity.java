@@ -63,8 +63,8 @@ public class ProfileActivity extends AppCompatActivity {
         toolbarButton = findViewById(R.id.toolbar_button);
         Intent testToolbar = new Intent(this, TestToolbar.class);
         toolbarButton.setOnClickListener(new View.OnClickListener() {
-            //public void onClick(View v) {startActivityForResult(testToolbar, TOOLBAR_REQUEST);}
-            public void onClick(View v) {startActivity(testToolbar);}
+            public void onClick(View v) {startActivityForResult(testToolbar, TOOLBAR_REQUEST);}
+//            public void onClick(View v) {startActivity(testToolbar);}
         });
         Log.e(ACTIVITY_NAME, "In function: onCreate()");
     }

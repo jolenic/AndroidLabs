@@ -8,10 +8,8 @@
         android:orderInCategory="10"
         app:showAsAction="always"/>  <!-- This uses showAsAction=always, so look at icon= parameter -->
 
-
     <item android:id="@+id/item2"
         android:orderInCategory="20"
-        app:actionViewClass="android.widget.SearchView"
         android:icon="@drawable/penguin"
         app:showAsAction="always"
         android:title="Item 2"/>    <!-- This uses showAsAction=always, so look at icon= parameter -->
