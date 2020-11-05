@@ -16,7 +16,9 @@ public class ProfileActivity extends AppCompatActivity {
     ImageButton mImageButton;
     Button chatButton;
     Button weatherButton;
+    Button toolbarButton;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int TOOLBAR_REQUEST = 2;
     public static final String ACTIVITY_NAME = "PROFILE_ACTIVITY";
 
     private void dispatchTakePictureIntent(){
@@ -57,6 +59,12 @@ public class ProfileActivity extends AppCompatActivity {
         Intent weatherForecast = new Intent(this, WeatherForecast.class);
         weatherButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {startActivity(weatherForecast);}
+        });
+        toolbarButton = findViewById(R.id.toolbar_button);
+        Intent testToolbar = new Intent(this, TestToolbar.class);
+        toolbarButton.setOnClickListener(new View.OnClickListener() {
+            //public void onClick(View v) {startActivityForResult(testToolbar, TOOLBAR_REQUEST);}
+            public void onClick(View v) {startActivity(testToolbar);}
         });
         Log.e(ACTIVITY_NAME, "In function: onCreate()");
     }
