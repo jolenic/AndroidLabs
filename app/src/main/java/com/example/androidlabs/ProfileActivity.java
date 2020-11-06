@@ -36,6 +36,9 @@ public class ProfileActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageButton.setImageBitmap(imageBitmap);
         }
+        if(requestCode == TOOLBAR_REQUEST && resultCode == 500) {
+            finish();
+        }
         Log.e(ACTIVITY_NAME, "In function: onActivityResult()");
     }
 
@@ -63,8 +66,9 @@ public class ProfileActivity extends AppCompatActivity {
         toolbarButton = findViewById(R.id.toolbar_button);
         Intent testToolbar = new Intent(this, TestToolbar.class);
         toolbarButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {startActivityForResult(testToolbar, TOOLBAR_REQUEST);}
-//            public void onClick(View v) {startActivity(testToolbar);}
+            public void onClick(View v) {
+                startActivityForResult(testToolbar, TOOLBAR_REQUEST);
+            }
         });
         Log.e(ACTIVITY_NAME, "In function: onCreate()");
     }

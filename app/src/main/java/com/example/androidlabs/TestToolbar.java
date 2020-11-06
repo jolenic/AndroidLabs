@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class TestToolbar extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class TestToolbar extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,8 @@ public class TestToolbar extends AppCompatActivity implements NavigationView.OnN
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView nav;
+        NavigationView nav = findViewById(R.id.nav_view);
+        nav.setNavigationItemSelectedListener(this);
 
     }
 
@@ -47,8 +48,7 @@ public class TestToolbar extends AppCompatActivity implements NavigationView.OnN
     public boolean onOptionsItemSelected(MenuItem item) {
         String message = null;
         //Look at your menu XML file. Put a case for every id in that file:
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             //what to do when the menu item is selected:
             case R.id.item1:
                 message = "You clicked on item 1";
@@ -67,34 +67,24 @@ public class TestToolbar extends AppCompatActivity implements NavigationView.OnN
         return true;
     }
 
-//    @Override
-//    public boolean onCreateNavigationMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.nav_menu, menu);
-//
-//        return true;
-//    }
-
     @Override
-    public boolean onNavigationItemSelected( MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {
 
-        Intent goTo = this.getIntent();
-        switch(item.getItemId())
-        {
+        Intent goTo;
+        switch (item.getItemId()) {
             case R.id.toChat:
                 goTo = new Intent(this, ChatRoomActivity.class);
+                startActivity(goTo);
                 break;
             case R.id.toWeather:
                 goTo = new Intent(this, WeatherForecast.class);
+                startActivity(goTo);
                 break;
             case R.id.toLogin:
-                goTo = new Intent(this, MainActivity.class);
+                setResult(500);
                 finish();
                 break;
         }
-        DrawerLayout drawerLayout = findViewById(R.id.drawer);
-        drawerLayout.closeDrawer(GravityCompat.START);
-        startActivity(goTo);
 
         return true;
     }
